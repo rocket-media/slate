@@ -1,0 +1,68 @@
+.tocify-wrapper {
+    font-size: 16px;
+
+    li {
+        line-height: 43px;
+    }
+
+    .tocify-subheader {
+        .tocify-item > a{
+            font-size: 15px;
+        }
+    }
+}
+
+.rf-form {
+    margin-right: 50%;
+    padding: 0 2em;
+    max-width: 30em;
+
+    input {
+        box-sizing: border-box;
+    }
+}
+.content {
+    pre, blockquote {
+        float: none;
+        width: auto;
+        margin-bottom: 1.7em;
+    }
+
+    h4 {
+        font-size: 1em;
+    }
+
+    table + pre {
+        margin-top: 2em;
+    }
+
+    p, ol, ul, aside {
+        max-width: 55em;
+    }
+
+    table {
+        max-width: 65em;
+    }
+
+    table.ui-datepicker-calendar {
+
+        td, th {
+            text-align: center;
+        }
+
+        tr:nth-child(odd) > td,
+        tr:nth-child(even) > td {
+            background-color: transparent;
+        }
+    }
+
+    .rf-section {
+        background: #ccc;
+        padding: 2em;
+        border: 2px dashed gray;
+    }
+}
+
+.is-hidden {
+    display: none;
+}

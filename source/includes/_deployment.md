@@ -1,0 +1,3 @@
+## Deployment
+
+When deploying a project with Rocket Forms, be mindful of the `.env` file. Your local version of this file **should not** be deployed to production, as it will likely contain settings specific to your local dev environment. When you deploy your project with RF, you'll want to create a server-specific version of the `.env` file. If you're using Booster, you can create an empty `.env` file on the server (in `site.live/rocket-forms`) and then navigate to the plugin settings screen in Craft and click "save". The plugin will populate the `.env` file with the supplied settings.

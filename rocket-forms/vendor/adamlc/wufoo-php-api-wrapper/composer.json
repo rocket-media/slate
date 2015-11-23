@@ -1,0 +1,20 @@
+{
+    "name": "adamlc/wufoo-php-api-wrapper",
+    "description": "A PHP 5.3+ Wrapper for the WuFoo API",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adam Curtis",
+            "email": "me@alc.im"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+
+    },
+    "autoload" : {
+        "psr-4" : {
+            "Adamlc\\Wufoo\\": "src"
+        }
+    }
+}
