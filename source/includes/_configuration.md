@@ -2,6 +2,7 @@
 
 Environment-specific config settings can be added to the `./rocket-forms/.env` file. Allowable options are:
 
+* `APP_ENV=local` By default, your local install will set the app environment to `local`. As such, forms will not be submitted to Wufoo; rather you'll see some debug info dumped to the console. If you want to actually test submission to Wufoo, change this value to `production`.
 * `REQUEST_KEY_ERROR_USES` By default, a request key is valid for `5` erroneous requests. If you wish to adjust this value, you can set it like `REQUEST_KEY_ERROR_USES=10`.
 
 The other values in this file are used by the app, but can, for the most part, be left alone and don't need to be changed:

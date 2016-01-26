@@ -49,5 +49,9 @@ The Rocket Forms app has three main components:
     * Communicates with the backend to retrieve a request key which it then supplies to the frontend via a template variable. The frontend then submits this (back) to the backend in order to validate the request.
     * This plugin exists entirely to prevent someone from spamming the form system.
 
+# Demo
+
+See the dmeo page at [http://rf.rocketmedia.com/demo/demo.html](http://rf.rocketmedia.com/demo/demo.html)
+
 
 

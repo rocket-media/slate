@@ -36,3 +36,16 @@ configure :build do
   # activate :asset_hash
   # activate :gzip
 end
+
+# Deploy
+activate :deploy do |deploy|
+  deploy.method = :rsync
+  deploy.host          = 'dv3'
+  deploy.path          = '/var/www/vhosts/rf.rocketmedia.com/docs'
+  # Optional Settings
+  # deploy.user  = 'garrett' # no default
+  deploy.port  = 25000 # ssh port, default: 22
+  # deploy.clean = true # remove orphaned files on remote host, default: false
+  deploy.flags = '-rltDvzO --no-p --del' # add custom flags, default: -avz
+  deploy.build_before = true
+end
