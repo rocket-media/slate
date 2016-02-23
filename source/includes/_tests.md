@@ -4,7 +4,7 @@ Tests exist for both the frontend and backend. The frontend uses a Javascript li
 
 ## Frontend
 
-Install nighwatch globally then
+Install nighwatch.js globally then
 
 `nightwatch`
 

@@ -55,6 +55,7 @@ Parameter    | Required | Description
 ------------ | ------- | -----------
 `api-id` | yes | This is the field name expected by the Wufoo API. See the [Finding Your Key](http://help.wufoo.com/articles/en_US/SurveyMonkeyArticleType/Wufoo-REST-API-V3) section on the Wufoo docs.
 `name` | yes | The name of the field. Should be unique. Will become the `name` attribute on the `<input>` element.
+`class` | no | Additional classes to be appended to the component.
 `required` | no | Whether the field is required. By default, fields are not requried.
 `:attrs` | no | An object of addtional attributes to be applied to the compiled `<input>` element. This will mostly be used to supply custom Parsley.js error messages.
 
@@ -62,6 +63,7 @@ Parameter    | Required | Description
 <rf-text
     api-id="[FieldX]"
     name="first_name"
+    class="blue rounded"
     id="first_name"
     required
     :attrs="{'attribute': 'value'}"

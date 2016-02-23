@@ -51,7 +51,7 @@ The Rocket Forms app has three main components:
 
 # Demo
 
-See the dmeo page at [http://rf.rocketmedia.com/demo/demo.html](http://rf.rocketmedia.com/demo/demo.html)
+See the demo page at [http://rf.rocketmedia.com/demo/demo.html](http://rf.rocketmedia.com/demo/demo.html)
 
 
 
