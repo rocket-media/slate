@@ -10,7 +10,7 @@ Note: If `bundle install` dies on `libv8` try installing with `bundle update` in
 
 1. `EXECJS_RUNTIME=Node bundle exec middleman`
 
-# How to update the demo page on
+# How to update the demo page
 
 1. On dv3 `cd /var/www/vhosts/rf.rocketmedia.com/rocket-forms`
 2. `sudo git pull`

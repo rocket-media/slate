@@ -4,11 +4,10 @@ Tests exist for both the frontend and backend. The frontend uses a Javascript li
 
 ## Frontend
 
-Install nighwatch.js globally then
-
-`nightwatch`
-
-`nightwatch -a [tag]` to run only certain tags
+1. Install nighwatch.js globally
+2. Configure the e2e host in MAMP (see `gulp/config.js`)
+3. Run `gulp serve:e2e`
+4. Run `nightwatch` (`nightwatch -a [tag]` to run only certain tags)
 
 ## Backend
 
