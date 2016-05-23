@@ -8,7 +8,7 @@ Note: If `bundle install` dies on `libv8` try installing with `bundle update` in
 
 # How to watch changes during local development
 
-1. `EXECJS_RUNTIME=Node bundle exec middleman`
+1. `bundle exec middleman`
 
 # How to update the demo page
 
