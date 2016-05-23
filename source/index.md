@@ -17,6 +17,7 @@ includes:
   - components/radio
   - components/checkbox
   - sections
+  - service-titan
   - local-development
   - tests
 
@@ -34,7 +35,7 @@ Rocket Forms is a custom form solution powered by Vue.js on the frontend, the Lu
 
 ## App Structure
 
-The Rocket Forms app has three main components: 
+The Rocket Forms app has three main components:
 
 1. **The backend**, which is a tiny application powered by [Lumen](http://lumen.laravel.com/).
     * Receives XHR requests from a forms page frontend.
@@ -52,6 +53,3 @@ The Rocket Forms app has three main components:
 # Demo
 
 See the demo page at [http://rf.rocketmedia.com/demo/demo.html](http://rf.rocketmedia.com/demo/demo.html)
-
-
-
