@@ -115,9 +115,10 @@ To allow your dear user to continue to the next section, use the `<rf-section-ne
 Parameter    | Required | Default | Description
 ------------ | -------- | ------- | -----------
 `class`     | no | - | To class to apply to the rendered `<a>` tag.
+`disabled`     | no | false | Should this button be disabled? May be any valid expression.
 
 ```html
-<rf-section-next class="button">Continue</rf-section-next>
+<rf-section-next class="button" :disabled="!$data.fieldData.time">Continue</rf-section-next>
 ```
 
 will render:
@@ -134,7 +135,3 @@ You may use whatever element you want to submit the form, but you must bind the 
 <a href="#" v-on:click="submit">Send message</a>
 <input class="is-hidden" type="submit">
 ```
-
-
-
-
