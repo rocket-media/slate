@@ -97,3 +97,28 @@ Parameter    | Required | Description
 ## Validation
 
 Since we're using [Parsley.js](http://parsleyjs.org/) for the frontend validation, any valid Parsley data attribute can be passed to the field. See the [Parsley form options](http://parsleyjs.org/doc/index.html#psly-usage-form) for details.
+
+## Instance Methods
+
+The Rocket Forms root Vue instance provides a few helpeful methods. See the `methods` property in `app.vue` in the source for more details. Used like:
+
+```
+var rocketForm = new Vue(window.rfOptions);
+rocketForm.getallChildren();
+```
+
+### `rocketForm.getAllChildren()`
+
+Gets all child components (fields, sections, etc.).
+
+### `rocketForm.getChildByName(name)`
+
+Gets a child component by name.
+
+### `rocketForm.resetFields([fieldNames], resetValidation = true)`
+
+Clears the value and optionally resets validation on all fields in `fieldNames`. E.g.
+
+```
+rocketForm.resetFields(['date', 'time', 'comments']);
+```
