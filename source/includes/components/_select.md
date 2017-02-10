@@ -7,21 +7,22 @@ In addition to the [global parameters](#global-parameters), the select input acc
 Parameter    | Required | Default | Description
 ------------ | -------- | ------- | -----------
 `:options` | yes | - | Provide the options for the dropdown. This can be an array of objects or a variable on the Vue instance. See example below.
-`default-option` | no | "-- Select --" | Specify the default option
+`default-option` | no | false | Specify a string for the default option. E.g. "-- Select --". If not specified, no default option will be created.
+`selected-option` | no | "1" | The index (zero-based) of the option to be pre-selected. E.g. "1" will pre-select the 2nd option.
 
 ### Passing options object
 
 <form class="rf-form live" id="rfSelect1">
     <div class="rf-field">
         <label class="rf-label" for="animal">Favorite animal:</label>
-        <rf-select api-id="FieldX" name="animal" required :options="[{label: 'Fish', value: 'fish'}, {label: 'Goat', value: 'goat'}]"></rf-select>
+        <rf-select api-id="FieldX" name="animal" required :options="[{label: 'Fish', value: 'fish'}, {label: 'Goat', value: 'goat'}]" default-option="-- Choose One --" :selected-option="1"></rf-select>
     </div>
 </form>
 
 ```html
 <div class="rf-field">
     <label class="rf-label" for="animal">Favorite animal:</label>
-    <rf-select api-id="FieldX" name="animal" required :options="[{label: 'Fish', value: 'fish'}, {label: 'Goat', value: 'goat'}]"></rf-select>
+    <rf-select api-id="FieldX" name="animal" required :options="[{label: 'Fish', value: 'fish'}, {label: 'Goat', value: 'goat'}]" default-option="-- Choose One --" :selected-option="1"></rf-select>
 </div>
 ```
 
@@ -47,4 +48,3 @@ This will allow you to bind the options like:
     <rf-select api-id="FieldX" name="date" required :options="myOptions"></rf-select>
 </div>
 ```
-
