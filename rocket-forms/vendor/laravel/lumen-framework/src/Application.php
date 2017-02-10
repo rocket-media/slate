@@ -10,6 +10,7 @@ use ErrorException;
 use Monolog\Logger;
 use RuntimeException;
 use FastRoute\Dispatcher;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Pipeline\Pipeline;
@@ -185,7 +186,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function version()
     {
-        return 'Lumen (5.1.4) (Laravel Components 5.1.*)';
+        return 'Lumen (5.1.6) (Laravel Components 5.1.*)';
     }
 
     /**
@@ -196,7 +197,21 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function environment()
     {
-        return env('APP_ENV', 'production');
+        $env = env('APP_ENV', 'production');
+
+        if (func_num_args() > 0) {
+            $patterns = is_array(func_get_arg(0)) ? func_get_arg(0) : func_get_args();
+
+            foreach ($patterns as $pattern) {
+                if (Str::is($pattern, $env)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return $env;
     }
 
     /**
@@ -206,7 +221,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function isDownForMaintenance()
     {
-        return false;
+        return file_exists($this->storagePath().'/framework/down');
     }
 
     /**
@@ -267,7 +282,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Register a deferred provider and service.
      *
      * @param  string  $provider
-     * @param  string  $service
+     * @param  string|null  $service
      * @return void
      */
     public function registerDeferredProvider($provider, $service = null)
@@ -517,7 +532,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function registerComposerBindings()
     {
-        $this->app->singleton('composer', function ($app) {
+        $this->singleton('composer', function ($app) {
             return new Composer($app->make('files'), $this->basePath());
         });
     }
@@ -810,6 +825,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Load a configuration file into the application.
      *
+     * @param  string  $name
      * @return void
      */
     public function configure($name)
@@ -830,17 +846,29 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Get the path to the given configuration file.
      *
-     * @param  string  $name
+     * If no name is provided, then we'll return the path to the config folder.
+     *
+     * @param  string|null  $name
      * @return string
      */
-    protected function getConfigurationPath($name)
+    public function getConfigurationPath($name = null)
     {
-        $appConfigPath = ($this->configPath ?: $this->basePath('config')).'/'.$name.'.php';
+        if (! $name) {
+            $appConfigDir = ($this->configPath ?: $this->basePath('config')).'/';
 
-        if (file_exists($appConfigPath)) {
-            return $appConfigPath;
-        } elseif (file_exists($path = __DIR__.'/../config/'.$name.'.php')) {
-            return $path;
+            if (file_exists($appConfigDir)) {
+                return $appConfigDir;
+            } elseif (file_exists($path = __DIR__.'/../config/')) {
+                return $path;
+            }
+        } else {
+            $appConfigPath = ($this->configPath ?: $this->basePath('config')).'/'.$name.'.php';
+
+            if (file_exists($appConfigPath)) {
+                return $appConfigPath;
+            } elseif (file_exists($path = __DIR__.'/../config/'.$name.'.php')) {
+                return $path;
+            }
         }
     }
 
@@ -890,7 +918,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Register a set of routes with a set of shared attributes.
      *
      * @param  array  $attributes
-     * @param  Closure  $callback
+     * @param  \Closure  $callback
      * @return void
      */
     public function group(array $attributes, Closure $callback)
@@ -1071,7 +1099,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         if (isset($this->groupAttributes['middleware'])) {
             if (isset($action['middleware'])) {
-                $action['middleware'] .= '|'.$this->groupAttributes['middleware'];
+                $action['middleware'] = $this->groupAttributes['middleware'].'|'.$action['middleware'];
             } else {
                 $action['middleware'] = $this->groupAttributes['middleware'];
             }
@@ -1323,7 +1351,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     protected function callLumenController($instance, $method, $routeInfo)
     {
         $middleware = $instance->getMiddlewareForMethod(
-            $this->make('request'), $method
+            $method
         );
 
         if (count($middleware) > 0) {
@@ -1396,7 +1424,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Send the request through the pipeline with the given callback.
      *
      * @param  array  $middleware
-     * @param  Closure  $then
+     * @param  \Closure  $then
      * @return mixed
      */
     protected function sendThroughPipeline(array $middleware, Closure $then)
@@ -1496,7 +1524,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Get the base path for the application.
      *
-     * @param  string  $path
+     * @param  string|null  $path
      * @return string
      */
     public function basePath($path = null)
@@ -1517,7 +1545,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Get the storage path for the application.
      *
-     * @param  string  $path
+     * @param  string|null  $path
      * @return string
      */
     public function storagePath($path = null)
@@ -1568,7 +1596,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Get the resource path for the application.
      *
-     * @param  string  $path
+     * @param  string|null  $path
      * @return string
      */
     public function resourcePath($path = null)

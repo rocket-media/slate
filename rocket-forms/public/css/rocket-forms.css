@@ -30,6 +30,14 @@ input[type=range]:focus + .rangeslider .rangeslider__handle { box-shadow: 0 0 6p
 
 .rf-accordion__tab.\--active { max-height: 20em; }
 
+.blink-enter { -webkit-animation: fade 0.3s 3; animation: fade 0.3s 3; -webkit-animation-direction: alternate; animation-direction: alternate; }
+
+@-webkit-keyframes fade { 0% { opacity: 0; }
+  100% { opacity: 100; } }
+
+@keyframes fade { 0% { opacity: 0; }
+  100% { opacity: 100; } }
+
 .rf-checkboxes.rf-field { padding-bottom: 0; }
 
 .rf-checkboxes input { display: block; }
@@ -40,7 +48,9 @@ input:focus + .rf-checkboxes__box { box-shadow: 0 0 5px 2px #787878; }
 
 .\--active > .rf-checkboxes__box:after { display: block; content: ''; position: absolute; font-size: 0.7em; top: 50%; left: 50%; -webkit-transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); transform: translate(-50%, -50%); font-family: "rf-icons"; content: 'c'; color: #9b9b9b; }
 
-.rf-errors-list { list-style: none; margin: -4px 0 0 0; padding: 0; color: white; background: #f25d44; border-radius: 0 0 4px 4px; }
+.rf-errors-list { list-style: none; display: none; margin: -4px 0 0 0; padding: 0; color: white; background: #f25d44; }
+
+.\--error .rf-errors-list { display: block; }
 
 .rf-errors-list li { padding: 0.5em 1em; margin: 0; }
 
@@ -67,6 +77,8 @@ textarea + .rf-errors-list { margin-top: -6px; }
 .rf-field__input input, .rf-field__input textarea, .rf-field__input select { width: 100%; background: #ebebeb; border: 2px solid #c3c3c3; padding: 0.5em 1em; border-radius: 4px; box-shadow: inset 0 2px 6px 0 rgba(0, 0, 0, 0.15); }
 
 .rf-field__input input:focus, .rf-field__input textarea:focus, .rf-field__input select:focus { outline: 0; border-color: #787878; box-shadow: 0 0 6px 2px rgba(120, 120, 120, 0.6); }
+
+.rf-field__input input:disabled, .rf-field__input textarea:disabled, .rf-field__input select:disabled { opacity: 1; }
 
 .rf-field__input input[type=range] { min-height: 0; padding: 0; }
 
@@ -108,9 +120,17 @@ textarea + .rf-errors-list { margin-top: -6px; }
 
 .rf-form__body { opacity: 0; -webkit-transition: opacity 0.5s ease-out; transition: opacity 0.5s ease-out; }
 
-.rf-form__spinner { position: absolute; opacity: 0.4; left: 50%; top: 8em; }
+.rf-form__spinner { position: fixed; left: 50%; top: 50%; }
 
-.rf-form.\--loading:before { background: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUzNS42MjVweCIgdmlld0JveD0iMC4zMjggMCA1MTIgNTM1LjYyNSIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwLjMyOCAwIDUxMiA1MzUuNjI1Ig0KCSB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnIGZpbGw9IiNjY2NjY2MiPg0KCTxwYXRoIGQ9Ik0yNTYuMzI1LDBjLTE0LjQ5OCwwLTI2LjI1NiwxMS43NTgtMjYuMjU2LDI2LjI1NnYxMDAuMjUyYzAsMTQuNDk4LDExLjc1OCwyNi4yNTYsMjYuMjU2LDI2LjI1Ng0KCQljMTQuNDk5LDAsMjYuMjU5LTExLjc1OCwyNi4yNTktMjYuMjU2VjI2LjI1NkMyODIuNTg0LDExLjc1OCwyNzAuODI0LDAsMjU2LjMyNSwweiIvPg0KCTxwYXRoIGQ9Ik0xMzUuNTg0LDU2Ljk1OWMtOC41MjQtMTEuNzI5LTI0LjkzOC0xNC4zMTktMzYuNjc4LTUuODA3Yy0xMS43MzUsOC41MjQtMTQuMzMsMjQuOTQzLTUuODA3LDM2LjY3NWw1OC45MzEsODEuMDk5DQoJCWM1LjE0LDcuMDcxLDEzLjE0NiwxMC44MTcsMjEuMjY4LDEwLjgxN2M1LjM1MSwwLDEwLjc1Mi0xLjYyOSwxNS40MTYtNS4wMTFjMTEuNzMyLTguNTI3LDE0LjMzLTI0Ljk0Niw1LjgwNy0zNi42NzgNCgkJTDEzNS41ODQsNTYuOTU5eiIvPg0KCTxwYXRoIGQ9Ik0xOC40NzQsMjE4LjE0Mmw5NS4zNCwzMC45ODJjMi42OTUsMC44NzUsNS40MzEsMS4yOTQsOC4xMiwxLjI5NGMxMS4wNjIsMCwyMS4zNjEtNy4wNTUsMjQuOTYyLTE4LjE0Ng0KCQljNC40ODctMTMuNzg5LTMuMDYyLTI4LjYwMS0xNi44NTYtMzMuMDgybC05NS4zMzgtMzAuOTgyYy0xMy43NzctNC40OTMtMjguNjA0LDMuMDYyLTMzLjA4MiwxNi44NTQNCgkJQy0yLjg2MiwxOTguODQ2LDQuNjg4LDIxMy42NjEsMTguNDc0LDIxOC4xNDJ6Ii8+DQoJPHBhdGggZD0iTTE0Ni44OTYsMzAzLjM2NmMtNC40NzYtMTMuNzg5LTE5LjI5Ni0yMS4zNDQtMzMuMDgyLTE2Ljg1NGwtOTUuMzQsMzAuOTc1QzQuNjg4LDMyMS45NzUtMi44NjIsMzM2Ljc5MSwxLjYyLDM1MC41NjgNCgkJYzMuNTk4LDExLjEsMTMuODk3LDE4LjE1MywyNC45NiwxOC4xNTNjMi42ODksMCw1LjQyNy0wLjQyMiw4LjEyMi0xLjI5OWw5NS4zMzgtMzAuOTc1DQoJCUMxNDMuODM0LDMzMS45NjksMTUxLjM4NCwzMTcuMTU1LDE0Ni44OTYsMzAzLjM2NnoiLz4NCgk8cGF0aCBkPSJNMTg4LjcwMiwzNjAuODkyYy0xMS43NC04LjUyMy0yOC4xNTMtNS45MjYtMzYuNjc3LDUuODEybC01OC45MzIsODEuMDkzYy04LjUyMywxMS43MzctNS45MjgsMjguMTU5LDUuODA3LDM2LjY4Mw0KCQljNC42NjEsMy4zODUsMTAuMDY1LDUuMDAzLDE1LjQxNiw1LjAwM2M4LjEyMiwwLDE2LjEyNS0zLjc3MSwyMS4yNjgtMTAuODE0bDU4LjkyOC04MS4wOTMNCgkJQzIwMy4wMzMsMzg1LjgzNywyMDAuNDM1LDM2OS40MTcsMTg4LjcwMiwzNjAuODkyeiIvPg0KCTxwYXRoIGQ9Ik0yNTYuMzI1LDM4Mi44NzVjLTE0LjQ5OCwwLTI2LjI1NiwxMS43NS0yNi4yNTYsMjYuMjU3djEwMC4yMzdjMCwxNC41MDcsMTEuNzU4LDI2LjI1NiwyNi4yNTYsMjYuMjU2DQoJCWMxNC40OTksMCwyNi4yNTktMTEuNzQ5LDI2LjI1OS0yNi4yNTZWNDA5LjEzMUMyODIuNTg0LDM5NC42MjUsMjcwLjgyNCwzODIuODc1LDI1Ni4zMjUsMzgyLjg3NXoiLz4NCgk8cGF0aCBkPSJNMzYwLjYyMywzNjYuNzA1Yy04LjUyMy0xMS43MjctMjQuOTM0LTE0LjMyNS0zNi42NzItNS44MTJjLTExLjczNyw4LjUyNC0xNC4zMzYsMjQuOTQ1LTUuODAxLDM2LjY4NGw1OC45MjksODEuMDkzDQoJCWM1LjE0LDcuMDc3LDEzLjE1LDEwLjgxNCwyMS4yNjUsMTAuODE0YzUuMzU1LDAsMTAuNzY5LTEuNjE4LDE1LjQzLTUuMDAzYzExLjcyNy04LjUyMywxNC4zMjQtMjQuOTQ1LDUuODAxLTM2LjY4Mw0KCQlMMzYwLjYyMywzNjYuNzA1eiIvPg0KCTxwYXRoIGQ9Ik00OTQuMTgzLDMxNy40ODZsLTk1LjM0OS0zMC45NzVjLTEzLjc3OC00LjQ4OS0yOC41OTMsMy4wNjUtMzMuMDgzLDE2Ljg1NGMtNC40NzksMTMuNzk1LDMuMDY1LDI4LjYwNCwxNi44NjYsMzMuMDgyDQoJCWw5NS4zMzgsMzAuOTg1YzIuNjg5LDAuODY2LDUuNDM2LDEuMyw4LjEyNSwxLjNjMTEuMDY1LDAsMjEuMzU1LTcuMDU1LDI0Ljk1Ny0xOC4xNDMNCgkJQzUxNS41MTYsMzM2Ljc3OSw1MDcuOTYsMzIxLjk2NCw0OTQuMTgzLDMxNy40ODZ6Ii8+DQoJPHBhdGggZD0iTTM2NS43NTEsMjMyLjI2N2MzLjYwMiwxMS4wOTEsMTMuOTAzLDE4LjE0NiwyNC45NjksMTguMTQ2YzIuNjg5LDAsNS40MjUtMC40MTMsOC4xMTQtMS4yOTdsOTUuMzQ5LTMwLjk4Mg0KCQljMTMuNzc3LTQuNDc5LDIxLjMzMy0xOS4yOTMsMTYuODU0LTMzLjA4MmMtNC40NzktMTMuNzg2LTE5LjI5My0yMS4zNDItMzMuMDgyLTE2Ljg1NGwtOTUuMzM4LDMwLjk4Mg0KCQlDMzY4LjgxNiwyMDMuNjYxLDM2MS4yNzIsMjE4LjQ3MywzNjUuNzUxLDIzMi4yNjd6Ii8+DQoJPHBhdGggZD0iTTMyMy45NTEsMTc0LjczM2M0LjY2MSwzLjM4MiwxMC4wNjIsNS4wMTEsMTUuNDE5LDUuMDExYzguMTI1LDAsMTYuMTI1LTMuNzUyLDIxLjI2NS0xMC44MTdsNTguOTM5LTgxLjA5OQ0KCQljOC41MjMtMTEuNzMxLDUuOTI2LTI4LjE1LTUuODAxLTM2LjY3NWMtMTEuNzM3LTguNTI0LTI4LjE1OS01LjkxNy0zNi42ODQsNS44MDdsLTU4LjkyOCw4MS4wOTYNCgkJQzMwOS42MTUsMTQ5Ljc4NywzMTIuMjE0LDE2Ni4yMDYsMzIzLjk1MSwxNzQuNzMzeiIvPg0KPC9nPg0KPC9zdmc+") no-repeat 43% center; background-size: 7%; border: 3px dashed #ebebeb; content: 'Loading...'; position: absolute; top: 0; color: #787878; text-indent: 49%; display: block; padding: 8em 0; width: 100%; opacity: 1; border-radius: 4px; }
+.rf-form__spinner:before { content: ''; display: block; background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; bottom: 0; left: 0; right: 0; }
+
+.rf-form__spinner:after { content: ''; width: 60px; height: 60px; background: #787878; border-radius: 4px; display: block; -webkit-transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); transform: translate(-50%, -50%); position: relative; z-index: -1; }
+
+.rf-form.\--loading { border: 3px dashed #c3c3c3; height: 50vh; background: #ebebeb; }
+
+.rf-form.\--loading:before { background: url("data:image/svg+xml;utf8,<svg width='120px' height='120px' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='xMidYMid' class='uil-default'><rect x='0' y='0' width='100' height='100' fill='none' class='bk'></rect><rect  x='46.5' y='42' width='7' height='16' rx='5' ry='5' fill='#000000' transform='rotate(0 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0s' repeatCount='indefinite'/></rect><rect  x='46.5' y='42' width='7' height='16' rx='5' ry='5' fill='#000000' transform='rotate(30 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.08333333333333333s' repeatCount='indefinite'/></rect><rect  x='46.5' y='42' width='7' height='16' rx='5' ry='5' fill='#000000' transform='rotate(60 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.16666666666666666s' repeatCount='indefinite'/></rect><rect  x='46.5' y='42' width='7' height='16' rx='5' ry='5' fill='#000000' transform='rotate(90 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.25s' repeatCount='indefinite'/></rect><rect  x='46.5' y='42' width='7' height='16' rx='5' ry='5' fill='#000000' transform='rotate(120 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.3333333333333333s' repeatCount='indefinite'/></rect><rect  x='46.5' y='42' width='7' height='16' rx='5' ry='5' fill='#000000' transform='rotate(150 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.4166666666666667s' repeatCount='indefinite'/></rect><rect  x='46.5' y='42' width='7' height='16' rx='5' ry='5' fill='#000000' transform='rotate(180 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.5s' repeatCount='indefinite'/></rect><rect  x='46.5' y='42' width='7' height='16' rx='5' ry='5' fill='#000000' transform='rotate(210 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.5833333333333334s' repeatCount='indefinite'/></rect><rect  x='46.5' y='42' width='7' height='16' rx='5' ry='5' fill='#000000' transform='rotate(240 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.6666666666666666s' repeatCount='indefinite'/></rect><rect  x='46.5' y='42' width='7' height='16' rx='5' ry='5' fill='#000000' transform='rotate(270 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.75s' repeatCount='indefinite'/></rect><rect  x='46.5' y='42' width='7' height='16' rx='5' ry='5' fill='#000000' transform='rotate(300 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.8333333333333334s' repeatCount='indefinite'/></rect><rect  x='46.5' y='42' width='7' height='16' rx='5' ry='5' fill='#000000' transform='rotate(330 50 50) translate(0 -30)'>  <animate attributeName='opacity' from='1' to='0' dur='1s' begin='0.9166666666666666s' repeatCount='indefinite'/></rect></svg>") no-repeat top left; background-size: 100%; content: ''; position: absolute; top: 50%; left: 50%; -webkit-transform: translate(-60px, -50%); -ms-transform: translate(-60px, -50%); transform: translate(-60px, -50%); color: #787878; display: block; width: 46px; height: 48px; border-radius: 4px; opacity: 0.5; }
+
+.rf-form.\--loading:after { content: 'Loading...'; position: absolute; top: 50%; left: 50%; opacity: 0.4; -webkit-transform: translate(-5px, -50%); -ms-transform: translate(-5px, -50%); transform: translate(-5px, -50%); }
 
 .rf-form.\--ready { max-height: none; }
 
@@ -120,15 +140,15 @@ textarea + .rf-errors-list { margin-top: -6px; }
 
 .rf-form.\--submitting:after { display: block; content: ''; position: absolute; top: 0; width: 100%; height: 102%; opacity: 0.5; }
 
-.rf-checkboxes, .rf-radios { background: #ebebeb; background: -webkit-linear-gradient(top, #f1f1f1 0%, #e8e8e8 100%); background: linear-gradient(to bottom, #f1f1f1 0%, #e8e8e8 100%); border-radius: 6px; overflow: hidden; box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.2); }
+.no-js .rf-form { display: none; }
+
+.rf-checkboxes, .rf-radios { overflow: hidden; }
 
 .rf-checkboxes p, .rf-radios p { padding: 0 1em; color: #5b5b5b; }
 
 .rf-field.rf-checkboxes, .rf-field.rf-radios { padding-bottom: 0; }
 
-.rf-checkboxes label, .rf-radios label { display: block; border-top: 1px solid #c3c3c3; padding: 0.5em 2.2em 0.5em 2.8em; color: #787878; position: relative; }
-
-.rf-checkboxes label:first-child, .rf-radios label:first-child { border: none; }
+.rf-checkboxes label, .rf-radios label { display: block; padding: 0.5em 2.2em 0.5em 2.8em; color: #787878; position: relative; }
 
 .rf-checkboxes label:hover, .rf-radios label:hover { background: #d2d2d2; }
 
@@ -140,9 +160,15 @@ textarea + .rf-errors-list { margin-top: -6px; }
 
 .rf-checkboxes label.\--active:after, .rf-radios label.\--active:after { font-family: "rf-icons"; display: block; position: absolute; right: 0.8em; top: 0.7em; content: 'c'; }
 
-.rf-checkboxes label.\--active + label.\--active, .rf-radios label.\--active + label.\--active { border-top-color: #ebebeb; }
-
 .\--error .rf-checkboxes, .\--error .rf-radios { box-shadow: 0 0 0 2px #f25d44; }
+
+.rf-checkboxes.\--contained, .rf-radios.\--contained { background: #ebebeb; background: -webkit-linear-gradient(top, #f1f1f1 0%, #e8e8e8 100%); background: linear-gradient(to bottom, #f1f1f1 0%, #e8e8e8 100%); box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.2); border-radius: 4px; }
+
+.rf-checkboxes.\--contained label, .rf-radios.\--contained label { border-top: 1px solid #c3c3c3; }
+
+.rf-checkboxes.\--contained label:first-child, .rf-radios.\--contained label:first-child { border: none; }
+
+.rf-checkboxes.\--contained label.\--active + label.\--active, .rf-radios.\--contained label.\--active + label.\--active { border-top-color: #ebebeb; }
 
 .rf-label { margin: 0.5em 0; display: block; padding-left: 1em; color: #5b5b5b; font-weight: bold; }
 
@@ -150,11 +176,21 @@ textarea + .rf-errors-list { margin-top: -6px; }
 
 .rf-label.\--sub { margin: -0.5em 0 0.5em; font-weight: normal; color: #787878; }
 
+.page-transition { -webkit-transition: all 0.4s ease-in-out; transition: all 0.4s ease-in-out; }
+
+.page-enter { opacity: 0; }
+
+.page-leave { display: none; }
+
 .rf-radios__circle { display: inline-block; position: relative; top: 0.1em; left: -1.9em; margin-right: -1.25em; width: 14px; height: 14px; border-radius: 50%; background: #ebebeb; background: -webkit-linear-gradient(top, #f1f1f1 0%, #e8e8e8 100%); background: linear-gradient(to bottom, #f1f1f1 0%, #e8e8e8 100%); box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.1); border: 1px solid #9b9b9b; }
 
 input:focus + .rf-radios__circle { box-shadow: 0 0 5px 2px #787878; }
 
 .\--active > .rf-radios__circle:after { display: block; content: ''; position: absolute; top: 50%; left: 50%; -webkit-transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); transform: translate(-50%, -50%); width: 6px; height: 6px; background: #9b9b9b; border-radius: 50%; }
+
+.rf-radios .\--with-description .option-label:after { content: ':'; }
+
+.rf-section-nav { cursor: pointer; }
 
 .section-transition { -webkit-transition: all 0.2s ease-in-out; transition: all 0.2s ease-in-out; }
 
@@ -166,7 +202,15 @@ input:focus + .rf-radios__circle { box-shadow: 0 0 5px 2px #787878; }
 
 .rf-status.\--error { background: #f25d44; }
 
+.rf-status.\--error pre { background: #f25d44; color: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.3); }
+
+.rf-status.\--success { background: #95c74c; }
+
+.rf-status.\--success pre { background: #95c74c; color: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.3); }
+
 .\--submitting .rf-status { visibility: hidden; }
+
+.rf-status pre { margin: .8em 0 0; font-size: 13px; padding: 0.5em; border-radius: 4px; white-space: normal; }
 
 table.ui-datepicker-calendar { width: 100%; border-collapse: collapse; border-spacing: 0; }
 

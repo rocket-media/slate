@@ -87,18 +87,12 @@ class WufooCurl
     public function setBasicCurlOptions()
     {
         //http://bugs.php.net/bug.php?id=47030
-//        curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, false);
+        // curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, 1);
-//        curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, false);
+        // curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($this->curl, CURLOPT_USERAGENT, 'Wufoo API Wrapper');
         curl_setopt($this->curl, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-
-        // This is required on local machine only
-        if ( ! preg_match("/\.com$/",$_SERVER['HTTP_HOST']))
-        {
-            curl_setopt($this->curl, CURLOPT_SSL_CIPHER_LIST, 'TLSv1');
-        }
     }
 
     private function setResultCodes()

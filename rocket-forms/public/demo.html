@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <title>Rocket Forms</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/rocket-forms.css">
+    <link rel="stylesheet" href="css/demo.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Sample form with all the trimmings</h1>
+        <hr>
+        <form class="rf-form --loading" id="rocketForm" form-id="q13gymyx0ipbdzb2" :debug="true" request-key="kdjfifejiefdkjfie" @keyup.enter="onEnter">
+            <div class="rf-form__body">
+                <div class="rf-status  --error" v-if="status.error">
+                    {{ status.error }}
+                    <pre>{{ status.errorMessage }}</pre>
+                </div>
+                <rf-radios api-id="FieldX" name="cats" label="What kind of service do you need? (custom option label markup)" :options="getOptions()" required option-label-template="<span class='cats'>%s</span>" option-description-template="<em class='dogs'>%s</em>"> </rf-radios>
+                <div class="rf-field">
+                    <label for="name" class="rf-label">Name:</label>
+                    <rf-text api-id="Field1" name="name" :required="true" :attrs.once="{'data-parsley-required-message': 'Please provide your name'}"></rf-text>
+                </div>
+                <div class="rf-field">
+                    <label for="email" class="rf-label">Email: (show only invalid validation)</label>
+                    <rf-text api-id="Field1" name="email" type="email" required validation="invalid" :attrs.once="{'data-parsley-required-message': 'Please provide your name'}"></rf-text>
+                </div>
+                <div class="rf-field">
+                    <label class="rf-label" for="date">Favorite animal:</label>
+                    <rf-select api-id="FieldX" name="animal" required :options.once="[{label: 'Fish', value: 'fish'}, {label: 'Goat', value: 'goat'}]"></rf-select>
+                </div>
+                <div class="rf-field">
+                    <label class="rf-label" for="date">Select with options as variable:</label>
+                    <rf-select api-id="FieldX" name="options" required :options="options"></rf-select>
+                </div>
+                <div class="rf-field">
+                    <label class="rf-label" for="date">Select with pre-selected value</label>
+                    <rf-select api-id="FieldX" name="options" required :options="options" :selected-option="1"></rf-select>
+                </div>
+                <div class="rf-field">
+                    <label for="experience" class="rf-label">Your experience (1 to 10):</label>
+                    <rf-range name="experience" value.literal="3" api-id="FieldX" show-value-label required></rf-range>
+                </div>
+                <div class="rf-field">
+                    <label for="phone" class="rf-label">Phone: (Optional)</label>
+                    <rf-text type="tel" api-id="Field4" name="phone" v-mask="'(000) 000-0000'" :attrs.once="{'data-parsley-trigger': 'change', 'data-parsley-error-message': 'Please provide a valid phone number'}"></rf-text>
+                </div>
+                <div class="rf-field rf-datepicker">
+                    <label for="date" class="rf-label">Select a date:</label>
+                    <rf-datepicker api-id="FieldX" required name="date" class="'face'" :attrs.once="{'data-parsley-error-message': 'Please provide a date'}"></rf-datepicker>
+                </div>
+                <div class="rf-field">
+                    <label class="rf-label" for="message">Message:</label>
+                    <rf-textarea api-id="Field6" rows="10" name="message" required :attrs.once="{'data-parsley-error-message': 'Please provide a message'}"></rf-textarea>
+                </div>
+                <rf-radios api-id="FieldX" name="serviceType" label="What kind of service do you need? (default style, with sub-labels)" :options="['Repair', 'New replacement or install quote', 'Maintenance visit']" required>
+                    <span slot="sublabel_0"><small>Sub-label 1</small></span>
+                    <span slot="sublabel_2"><small>Sub-label 2</small></span>
+                </rf-radios>
+                <rf-radios api-id="Field6" name="serviceType" class="--contained" label="What kind of service do you need? (contained style)" :options="['Repair', 'New replacement or install quote', 'Maintenance visit']" required></rf-radios>
+                <div class="rf-field">
+                    <p class="rf-label --strong">Select all the good things:</p>
+                    <div class="rf-checkboxes">
+                        <rf-checkbox name="show" class="goats fish" checked-value="Star Trek" api-id="Field8">Star Trek (custom label with <b>markup</b>)</rf-checkbox>
+                        <rf-checkbox name="show" api-id="Field9" label="Lord of the Rings"></rf-checkbox>
+                        <rf-checkbox name="show" api-id="Field10" label="Star Wars"></rf-checkbox>
+                        <rf-checkbox name="show" api-id="Field109" label="Machform"></rf-checkbox>
+                        <div class="rf-errors"></div>
+                    </div>
+                </div>
+                <p>
+                    <div class="rf-status  --error" v-if="status.error" transition="blink">
+                        {{ status.error }}
+                        <pre>{{ status.errorMessage }}</pre>
+                    </div>
+                    <a href="#" class="btn btn-primary  js-submit" v-on:click="submit">Submit</a>
+                </p>
+            </div>
+            <hr>
+        </form>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        
+        
+        <script src="js/rocket-forms.dev.js"></script>
+        <script>
+        window.rfOptions.methods.test = function () {
+            return 'dog';
+        }
+        window.rfOptions.methods.sublabels = function () {
+            return ['cats', 'dogs'];
+        }
+        window.rfOptions.methods.getOptions = function () {
+            return [{ label: 'Repair', description: 'details details'}, 'New replacement or install quote', 'Maintenance visit'];
+        }
+        window.rfOptions.data.options = [
+            {
+                label: 'Options 1',
+                value: '1'
+            },
+            {
+                label: 'Options 2',
+                value: '2'
+            }
+        ]
+        Vue.config.debug = true;
+        var rocketForm = new Vue(window.rfOptions);
+        </script>
+    </div>
+</body>
+
+</html>

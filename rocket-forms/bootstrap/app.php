@@ -1,12 +1,7 @@
 <?php
 
 require_once __DIR__.'/../vendor/autoload.php';
-
-$dotenv = new Dotenv\Dotenv(__DIR__.'/../');
-$dotenv->load();
-$dotenv->required('ROCKET_FORMS_API_KEY')->notEmpty();
-$dotenv->required('WUFOO_API_KEY')->notEmpty();
-$dotenv->required('WUFOO_SUBDOMAIN')->notEmpty();
+require_once __DIR__.'/../vendor/rollbar/rollbar/src/rollbar.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -23,8 +18,7 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
- $app->withFacades();
-
+$app->withFacades();
 // $app->withEloquent();
 
 /*
@@ -48,6 +42,36 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+// Add custom dotenv requirements. We make sure to add these after the
+// exception handlers (above) have been registered, so that they handle any
+// exceptions thrown
+$dotenv = new Dotenv\Dotenv(__DIR__.'/../');
+$dotenv->load();
+$dotenv->required('FORM_ID_HEADER')->notEmpty();
+$dotenv->required('REQUEST_KEY_HEADER')->notEmpty();
+$dotenv->required('ROCKET_FORMS_API_KEY')->notEmpty();
+$dotenv->required('WUFOO_API_KEY')->notEmpty();
+$dotenv->required('WUFOO_SUBDOMAIN')->notEmpty();
+
+/*
+|--------------------------------------------------------------------------
+| Rollbar error reporting
+|--------------------------------------------------------------------------
+*/
+$config = array(
+    // required
+    'access_token' => 'aa1d7fa0f4044a908aed171d1670b17f',
+    // optional - environment name. any string will do.
+    'environment' => app()->environment(),
+    // optional - path to directory your code is in. used for linking stack traces.
+    'root' => $_SERVER['DOCUMENT_ROOT']
+);
+$set_exception_handler = false;
+$set_error_handler = false;
+if (app()->environment() === 'production') {
+    Rollbar::init($config, $set_exception_handler, $set_error_handler);
+}
+
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -67,9 +91,11 @@ $app->singleton(
 //      Laravel\Lumen\Http\Middleware\VerifyCsrfToken::class,
 // ]);
 
-// $app->routeMiddleware([
-
-// ]);
+$app->routeMiddleware([
+    'verifyRequestKey' => App\Http\Middleware\VerifyRequestKey::class,
+    'verifyApiKey' => App\Http\Middleware\VerifyApiKey::class,
+    'verifyFormId' => App\Http\Middleware\VerifyFormId::class,
+]);
 
 /*
 |--------------------------------------------------------------------------

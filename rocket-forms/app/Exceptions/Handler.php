@@ -5,6 +5,8 @@ namespace App\Exceptions;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use App\Responder;
+use Rollbar;
 
 class Handler extends ExceptionHandler
 {
@@ -27,6 +29,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
+        Rollbar::report_exception($e);
         return parent::report($e);
     }
 
