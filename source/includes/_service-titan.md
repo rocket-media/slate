@@ -2,7 +2,7 @@
 
 Rocket Forms integrates with the Service Titan `bookings/` API. Rocket Forms will send certain form data to Service Titan, which will show up as a new booking on the "Calls" screen. This saves the CSR from having to copy/paste data from an email notification into Service Titan. However, because the call to the Service Titan API may fail silently, the CSRs will still need to keep an eye on the notification emails to ensure leads aren't being missed.
 
-Note, all email notifications/confirmations are still handled by Wufoo and *not* Service Titan.
+Note, all email notifications/confirmations are still handled by Wufoo and *not* Service Titan. Also, as is the case with Wufoo, data is not really sent to the Service Titan API if Rocket Forms is in any environment other than production. In other words, unless `APP_ENV=production` is set in `rocket-forms/.env`, data will **not** be sent to the Service Titan API. Instead, a fake response will be returned.
 
 ## Form fields sent to Service Titan
 
