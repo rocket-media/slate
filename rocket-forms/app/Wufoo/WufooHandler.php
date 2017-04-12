@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\KeyManager;
 use App\Responder;
 use App\Exceptions\Handler;
+use Log;
 
 class WufooHandler {
 
@@ -109,6 +110,9 @@ class WufooHandler {
 
         // Decrement the 'uses' of the key
         $keyManager->decrement($request->header(env('REQUEST_KEY_HEADER')));
+
+        // Log the field errors
+        Log::error('Field errors', $fieldErrors);
 
         return $this->respondFieldError($fieldErrors, $wufooResponse->ErrorText);
     }

@@ -29,8 +29,16 @@
                     <rf-text api-id="Field1" name="email" type="email" required validation="invalid" :attrs.once="{'data-parsley-required-message': 'Please provide your name'}"></rf-text>
                 </div>
                 <div class="rf-field">
+                    <label class="rf-label" for="simpleOptions">Favorite plant:</label>
+                    <rf-select api-id="FieldX" name="simpleOptions" required :options="['Trees','Plants','Bushes']" :selected-option="1"></rf-select>
+                </div>
+                <div class="rf-field">
                     <label class="rf-label" for="date">Favorite animal:</label>
-                    <rf-select api-id="FieldX" name="animal" required :options.once="[{label: 'Fish', value: 'fish'}, {label: 'Goat', value: 'goat'}]"></rf-select>
+                    <rf-select api-id="FieldX" name="animal" v-on:click="resetFields(['options'])" required :options="[{label: 'Fish', value: 'fish'}, {label: 'Goat', value: 'goat'}]"></rf-select>
+                </div>
+                <div class="rf-field">
+                    <label class="rf-label" for="selectGroups">Select with optgroups:</label>
+                    <rf-select api-id="FieldX" name="selectGroups" required :options="optionGroups" :selected-option="1"></rf-select>
                 </div>
                 <div class="rf-field">
                     <label class="rf-label" for="date">Select with options as variable:</label>
@@ -38,7 +46,7 @@
                 </div>
                 <div class="rf-field">
                     <label class="rf-label" for="date">Select with pre-selected value</label>
-                    <rf-select api-id="FieldX" name="options" required :options="options" :selected-option="1"></rf-select>
+                    <rf-select api-id="FieldX" name="options2" required :options="options" :selected-option="1"></rf-select>
                 </div>
                 <div class="rf-field">
                     <label for="experience" class="rf-label">Your experience (1 to 10):</label>
@@ -81,7 +89,9 @@
             </div>
             <hr>
         </form>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <!-- Using CDN version here to test incompatible versions of jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <!-- <script src="bower/jquery/dist/jquery.js"></script> -->
         
         
         <script src="js/rocket-forms.dev.js"></script>
@@ -105,6 +115,30 @@
                 value: '2'
             }
         ]
+        window.rfOptions.data.optionGroups = [
+            { label: 'Regular', value: 'reg' },
+            {
+                label: 'Group 1',
+                value: [
+                    { label: 'Option A', value: 'a' },
+                    { label: 'Option B', value: 'b' },
+                    'String option',
+                    'String option2'
+                ]
+            },
+            {
+                label: 'Group 2',
+                value: [
+                    { label: 'Option C', value: 'c' },
+                    { label: 'Option D', value: 'd' }
+                ]
+            },
+            {
+                label: 'Group 3',
+                value: ['Option 5', 'Option 6']
+            },
+            { label: 'Another Regular', value: 'reg2' }
+        ];
         Vue.config.debug = true;
         var rocketForm = new Vue(window.rfOptions);
         </script>

@@ -22730,11 +22730,13 @@ module.exports = Vue;
             // Output version
             this._log().info('Rocket Forms: Loaded version ' + config.version);
 
+            // Check jQuery version
+            this._checkForJquery();
+
             // Re-enable Vue output if in debug
             if (this.debug) {
                 Vue.config.silent = false;
             }
-
 
             // If error tracking enabled, make sure global error tracker object
             // (e.g. Rollbar) is present
@@ -22986,9 +22988,10 @@ module.exports = Vue;
                     // Because we're using v-if, child may already be removed from DOM
                     if (child !== undefined) {
                         child.$set('value', null);
+                        $(child.inputEl).val('');
                         // Also reset validation on the input element if it exists in DOM
                         if (resetValidation && child.inputEl) {
-                            child.inputEl.parsley().reset();
+                            child.inputEl.parsley(config.parsleyOptions).reset();
                         }
                     }
                     // In addition to setting the value on the child element, we also
@@ -23124,7 +23127,7 @@ module.exports = Vue;
                 // If debug is not enabled, disable logging by returning no-op functions
                 // http://stackoverflow.com/questions/21634886/what-is-the-javascript-convention-for-no-operation
                 if (!this.debug) {
-                    return { error: Function.prototype, info: Function.prototype, table: Function.prototype };
+                    return { error: Function.prototype, info: Function.prototype, table: Function.prototype, warn: Function.prototype, report: Function.prototype };
                 }
                 return {
                     error: function () {
@@ -23153,6 +23156,23 @@ module.exports = Vue;
                         }), ['id', 'name', 'value']);
                     }
                 };
+            },
+            /**
+             * Ensure a compatible version of jQuery is loaded
+             */
+            _checkForJquery: function () {
+                var jqueryVersion = $().jquery;
+                this._log().info('jQuery ' + jqueryVersion + ' detected.');
+
+                var jqueryVersionParts = jqueryVersion
+                    .split('.')
+                    .map(function (item) {
+                        return parseInt(item, 10);
+                    });
+
+                if (jqueryVersionParts[0] === 1 && jqueryVersionParts[1] < 10) {
+                    throw 'Incompatible version of jQuery detected. Rocket Forms requires jQuery 1.10+';
+                }
             }
         }
     };
@@ -23931,7 +23951,7 @@ var __vue_template__ = "<div class=\"rf-section\" :class=\"computedClass\" id=\"
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
 
 },{"../config":107,"./getInputElement":94}],103:[function(require,module,exports){
-var __vue_template__ = "<div class=\"rf-field__input --select {{class}}\">\n        <select name=\"{{name}}\" v-bind=\"attrs\" id=\"{{name}}\" v-model=\"value\" required=\"{{required}}\">\n            <option value=\"\" selected=\"selected\" v-if=\"defaultOption\">{{defaultOption}}</option>\n            <!-- Accept a flat array of options, or an array of hashes -->\n            <option v-for=\"option in options\" v-bind:value=\"option.value || option\">{{option.label || option}}</option>\n        </select>\n    </div>";
+var __vue_template__ = "<div class=\"rf-field__input --select {{class}}\">\n        <select name=\"{{name}}\" v-bind=\"attrs\" id=\"{{name}}\" v-model=\"value\" required=\"{{required}}\" v-on:focus=\"bindValidation\">\n            <option value=\"\" selected=\"selected\" v-if=\"defaultOption\">{{defaultOption}}</option>\n            <template v-for=\"option in options\">\n                <template v-if=\"typeof option.value === 'string' || typeof option.value === 'undefined'\">\n                    <!-- Accept a flat array of options, or an array of hashes -->\n                    <option v-bind:value=\"option.value || option\">{{option.label || option}}</option>\n                </template>\n                <template v-if=\"typeof option.value === 'object'\">\n                    <optgroup label=\"{{option.label}}\">\n                        <option v-for=\"innerOption in option.value\" v-bind:value=\"innerOption.value || innerOption\">{{innerOption.label || innerOption}}</option>\n                    </optgroup>\n                </template>\n            </template>\n        </select>\n    </div>";
 /* eslint global-strict: 0 */
     'use strict';
 
@@ -23968,15 +23988,44 @@ var __vue_template__ = "<div class=\"rf-field__input --select {{class}}\">\n    
         },
         created: function () {
             setValidationClass.call(this, this.validation);
+
             // Set field value if selectedOption is passed
-            this.value = this.selectedOption > -1 && typeof this.options[this.selectedOption] !== 'undefined' ? this.options[this.selectedOption].value || this.options[this.selectedOption] : null;
+            this.value = this.selectedOption > -1 && typeof this.flattenedOptions[this.selectedOption] !== 'undefined'
+                ? this.flattenedOptions[this.selectedOption].value || this.flattenedOptions[this.selectedOption]
+                : null;
         },
         attached: function () {
             this.$data.inputEl = getInputElement(this.$el);
-            bindValidation.forInputType('select').call(this);
         },
         watch: {
-            'value': [dispatchUpdated]
+            'value': dispatchUpdated
+        },
+        computed: {
+            flattenedOptions: function () {
+                var options = [];
+                this.options.forEach(function (option) {
+                    // Remember, all the ||'s are allowing for options to be expressed and simple strings or as objects
+                    if (typeof option === 'string' || typeof option.value === 'string') {
+                        options.push({ label: option.label || option, value: option.value || option });
+                    } else if (typeof option.value === 'object') {
+                        option.value.forEach(function (innerOption) {
+                            options.push({ label: innerOption.label || innerOption, value: innerOption.value || innerOption });
+                        });
+                    }
+                });
+
+                return options;
+            }
+        },
+        methods: {
+            /**
+             * We defer binding validation until field becomes focused (see v-on
+             * in the markup). This is so that when we do bind the validation,
+             * the data-parsley-error-class (et al.) is respected.
+             */
+            bindValidation: function () {
+                bindValidation.forInputType('select').call(this);
+            }
         }
     };
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
@@ -24025,12 +24074,13 @@ var __vue_template__ = "<div class=\"rf-field__input {{class}}\">\n        <inpu
             this.$data.inputEl = getInputElement(this.$el);
         },
         watch: {
-            'value': [dispatchUpdated, function (value, oldValue) {
+            'value': function (value, oldValue) {
+                dispatchUpdated.call(this, value, oldValue);
                 // Only bind after user first dirties the field
                 if (value !== '') {
                     bindValidation.forInputType('text').call(this);
                 }
-            }]
+            }
         }
     };
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
@@ -24071,12 +24121,13 @@ var __vue_template__ = "<div class=\"rf-field__input {{class}}\">\n        <text
             this.$data.inputEl = getInputElement(this.$el);
         },
         watch: {
-            'value': [dispatchUpdated, function (value, oldValue) {
+            'value': function (value, oldValue) {
+                dispatchUpdated.call(this, value, oldValue);
                 // Only bind after user first dirties the field
                 if (value !== '') {
                     bindValidation.forInputType('textarea').call(this);
                 }
-            }]
+            }
         }
     };
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
@@ -24101,7 +24152,7 @@ module.exports = function (validationSetting) {
 'use strict';
 
 module.exports = {
-    version: '1.12.7',
+    version: '1.13.0',
     // Moment formatting
     dateDisplayFormat: 'MMMM DD, YYYY',
     dateModelFormat: 'YYYYMMDD',

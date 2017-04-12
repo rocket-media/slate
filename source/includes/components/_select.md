@@ -15,7 +15,7 @@ Parameter    | Required | Default | Description
 <form class="rf-form live" id="rfSelect1">
     <div class="rf-field">
         <label class="rf-label" for="animal">Favorite animal:</label>
-        <rf-select api-id="FieldX" name="animal" required :options="[{label: 'Fish', value: 'fish'}, {label: 'Goat', value: 'goat'}]" default-option="-- Choose One --" :selected-option="1"></rf-select>
+        <rf-select api-id="FieldX" name="animal" required :options="[{label: 'Fish', value: 'fish'}, {label: 'Goat', value: 'goat'}]" :selected-option="1"></rf-select>
     </div>
 </form>
 
@@ -47,4 +47,37 @@ This will allow you to bind the options like:
     <label class="rf-label" for="date">Favorite animal:</label>
     <rf-select api-id="FieldX" name="date" required :options="myOptions"></rf-select>
 </div>
+```
+
+### Specifying option groups
+
+You can also create option groups like:
+
+<form class="rf-form live" id="rfSelect2">
+    <div class="rf-field">
+        <label class="rf-label" for="animal">Favorite animal:</label>
+        <rf-select api-id="FieldX" name="animal" required :options="[{label: 'Option group 1', value: ['Suboption A','Suboption B']}, {label: 'Option group 2', value: ['Suboption C', 'Suboption D']}]" :selected-option="1"></rf-select>
+    </div>
+</form>
+
+```html
+<script>
+    window.rfOptions.data.myOptions = [
+        {   
+            label: 'Option group 1',
+            value: [
+                { label: 'Suboption A', value: 'a' },
+                { label: 'Suboption B', value: 'b' }
+            ]
+        },
+        {   
+            label: 'Option group 2',
+            value: [
+                { label: 'Suboption C', value: 'c' },
+                { label: 'Suboption D', value: 'd' }
+            ]
+        },
+        ...
+    ];
+</script>
 ```
