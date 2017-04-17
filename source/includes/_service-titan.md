@@ -17,11 +17,13 @@ By default, the Rocket Forms app will look for certain fields to be present in t
             phone: this.fieldData.phone.replace(/[^\d]/g, ''),
             address: this.fieldData.address,
             city: this.fieldData.city,
-            serviceType: this.fieldData.serviceType,
+            otherFields: [
+                { label: 'Service Type', value: this.fieldData.serviceType },
+                { label: 'Service Category', value: this.fieldData.serviceCategory },
+                { label: 'Requested Time', value: this.fieldData.time }
+            ],
             date: this.fieldData.date,
-            time: this.fieldData.time,
             message: this.fieldData.comments,
-            serviceCategory: this.fieldData.serviceCategory,
             customerType: 'Residential'
         };
     }
@@ -32,7 +34,6 @@ All fields are required to be present unless otherwise indicated.
 
 Field name | Description
 ---------- | -----------
-`serviceType` | Indicates whether request is for repair, maintenance, etc. Not used by ST, but appended <br> to the `message` for CSR.
 `name` | Customer name
 `email` | Customer email
 `phone` | Customer phone in 10-digit format, e.g. `4801231234`
@@ -41,8 +42,7 @@ Field name | Description
 `zip` |  (optional) Customer zip
 `date` | Requested service date in format `Ymd` e.g. `20160502`
 `message` |  This is mapped to the `summary` field in Service Titan, which is the only field available to describe <br> the customer's problem and what kind of service is being requested.
-`time` | (optional), Not used by ST, but appended to the `message` for CSR. See [Appointment times](#appointment-times)
-`serviceCategory` | (optional), If `serviceType` is maintenance, this can be used to indicate what kind of maintenance is needed, <br> e.g. HVAC, Plumbing, Electrical, etc. Not used by ST, but appended to the `message` for CSR.
+`otherFields` | An array of additional fields to be appended to the summary field. Use this to provide form data to a CSR when there's no corresponding Service Titan booking field. See example above for format.
 `customerType` | (optional), values may include `Commercial` or `Residential`. Defaults to `Residential`.
 
 ## Environment settings
