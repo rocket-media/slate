@@ -6,10 +6,26 @@ Note, all email notifications/confirmations are still handled by Wufoo and *not*
 
 ## Form fields sent to Service Titan
 
-Rather than allowing a lot of configuration, the Rocket Forms app will look for certain fields to be present in the form subsmission, and it will pass that data on to Service Titan. Here are the fields that will be sent to Service Titan. Note, the fields must be named exactly as they appear here; that is, their `name` attribute must match what is listed below. E.g.
+By default, the Rocket Forms app will look for certain fields to be present in the form submission, and it will pass that data on to Service Titan. If you need to customize how the form data maps to the Service Titan fields, you may override the default method by providing your own before form initialization, e.g.:
 
-```
-<rf-text name="address" ... ></rf-text>
+```html
+<script>
+    window.rfOptions.methods.prepareServiceTitanData = function () {
+        return {
+            name: this.fieldData.firstName + ' ' + this.fieldData.lastName,
+            email: this.fieldData.email,
+            phone: this.fieldData.phone.replace(/[^\d]/g, ''),
+            address: this.fieldData.address,
+            city: this.fieldData.city,
+            serviceType: this.fieldData.serviceType,
+            date: this.fieldData.date,
+            time: this.fieldData.time,
+            message: this.fieldData.comments,
+            serviceCategory: this.fieldData.serviceCategory,
+            customerType: 'Residential'
+        };
+    }
+</script>
 ```
 
 All fields are required to be present unless otherwise indicated.
