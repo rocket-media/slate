@@ -12,7 +12,7 @@ Note: If `bundle install` dies on `libv8` try installing with `bundle update` in
 
 # How to update the demo page
 
-1. On dv3 `cd /var/www/vhosts/rf.rocketmedia.com/rocket-forms`
+1. On dv5 `cd /srv/users/rocketmedia/apps/rf-rocketmedia-com/rocket-forms`
 2. `sudo git pull`
 
 Note: Make sure you've updated `dist/demo.html` in the repo, as this is the file that gets served.

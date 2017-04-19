@@ -15,6 +15,7 @@ tmp
 build/
 .cache
 source/bower_components
+dist/storage
 
 # YARD artifacts
 .yardoc

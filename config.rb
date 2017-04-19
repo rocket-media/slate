@@ -40,11 +40,11 @@ end
 # Deploy
 activate :deploy do |deploy|
   deploy.method = :rsync
-  deploy.host          = 'dv3'
-  deploy.path          = '/var/www/vhosts/rf.rocketmedia.com/docs'
+  deploy.host          = 'dv5'
+  deploy.path          = '/srv/users/rocketmedia/apps/rf-rocketmedia-com/docs'
   # Optional Settings
   # deploy.user  = 'garrett' # no default
-  deploy.port  = 25000 # ssh port, default: 22
+  # deploy.port  = 22 # ssh port, default: 22
   # deploy.clean = true # remove orphaned files on remote host, default: false
   deploy.flags = '-rltDvzO --no-p --del' # add custom flags, default: -avz
   deploy.build_before = true
